@@ -495,3 +495,193 @@ FROM hr.employees;
 
 -- FIRST_VALUE(first_name)
 -- Therefore the name of the highest-paid employee is displayed.
+
+-- Example 23 – Earliest Joining Date in Each Department
+
+SELECT
+    employee_id,
+    first_name,
+    department_id,
+    hire_date,
+
+    FIRST_VALUE(hire_date) OVER (
+        PARTITION BY department_id
+        ORDER BY hire_date ASC
+    ) AS earliest_hire_date
+
+FROM hr.employees;
+
+-- Explanation
+-- ASC places the oldest/earliest hire date first.
+
+-- Therefore FIRST_VALUE() returns the earliest hire date.
+
+
+-- Example 24 – First Employee Who Joined Each Department
+SELECT
+    employee_id,
+    first_name,
+    department_id,
+    hire_date,
+
+    FIRST_VALUE(first_name) OVER (
+        PARTITION BY department_id
+        ORDER BY hire_date ASC
+    ) AS first_joined_employee
+
+FROM hr.employees;
+
+-- Explanation
+-- Employees are ordered based on hire_date.
+
+-- The first employee name in each department is returned.
+
+
+---------------------------------------------------PART 5 – LAST_VALUE()-----------------------------------------------------------------------------------------------
+
+-- Example 25 – Display Lowest Salary Against Every Employee
+SELECT
+    employee_id,
+    first_name,
+    salary,
+    LAST_VALUE(salary) OVER (
+        ORDER BY salary DESC
+        ROWS BETWEEN UNBOUNDED PRECEDING
+        AND UNBOUNDED FOLLOWING
+    ) AS lowest_salary
+
+FROM hr.employees;
+
+-- Explanation
+-- Salary is arranged from highest to lowest.
+
+-- The last row therefore contains the lowest salary.
+
+-- The frame:
+
+-- ROWS BETWEEN UNBOUNDED PRECEDING
+-- AND UNBOUNDED FOLLOWING
+-- means:
+
+-- First Row
+--    ↓
+-- Entire Window
+--    ↓
+-- Last Row
+
+-- Example 26 – Highest Salary Using LAST_VALUE
+SELECT
+    employee_id,
+    first_name,
+    salary,
+
+    LAST_VALUE(salary) OVER (
+        ORDER BY salary ASC
+        ROWS BETWEEN UNBOUNDED PRECEDING
+        AND UNBOUNDED FOLLOWING
+    ) AS highest_salary
+
+FROM hr.employees;
+
+-- Explanation
+-- Because salary is sorted ascending:
+
+-- Lowest
+-- ↓
+-- ...
+-- ↓
+-- Highest
+-- the last value becomes the highest salary.
+
+-- Example 27 – Lowest Salary in Each Department
+SELECT
+    employee_id,
+    first_name,
+    department_id,
+    salary,
+
+    LAST_VALUE(salary) OVER (
+        PARTITION BY department_id
+        ORDER BY salary DESC
+        ROWS BETWEEN UNBOUNDED PRECEDING
+        AND UNBOUNDED FOLLOWING
+    ) AS department_lowest_salary
+
+FROM hr.employees;
+
+
+-- Explanation
+-- Each department gets its own window.
+
+-- Within that department:
+
+-- Highest Salary
+-- ↓
+-- Middle Salaries
+-- ↓
+-- Lowest Salary
+-- LAST_VALUE() returns the lowest salary.
+
+
+-- Example 28 – Lowest Paid Employee Name in Each Department
+SELECT
+    employee_id,
+    first_name,
+    department_id,
+    salary,
+
+    LAST_VALUE(first_name) OVER (
+        PARTITION BY department_id
+        ORDER BY salary DESC
+        ROWS BETWEEN UNBOUNDED PRECEDING
+        AND UNBOUNDED FOLLOWING
+    ) AS lowest_paid_employee
+
+FROM hr.employees;
+-- Explanation
+-- The last employee after sorting the sal in desc order will be the lowest-paid employee.
+
+-- Example 29 – Latest Hire Date in Each Department
+SELECT
+    employee_id,
+    first_name,
+    department_id,
+    hire_date,
+
+    LAST_VALUE(hire_date) OVER (
+        PARTITION BY department_id
+        ORDER BY hire_date ASC
+        ROWS BETWEEN UNBOUNDED PRECEDING
+        AND UNBOUNDED FOLLOWING
+    ) AS latest_hire_date
+
+FROM hr.employees;
+-- Explanation
+-- Employees are sorted from earliest to latest.
+
+-- Therefore the last value is the latest hire date.
+
+
+-- Example 30 – Compare Employee Salary with Highest and Lowest Department Salary
+SELECT
+    employee_id,
+    first_name,
+    department_id,
+    salary,
+
+    FIRST_VALUE(salary) OVER (
+        PARTITION BY department_id
+        ORDER BY salary DESC
+        ROWS BETWEEN UNBOUNDED PRECEDING
+        AND UNBOUNDED FOLLOWING
+    ) AS highest_department_salary,
+
+    LAST_VALUE(salary) OVER (
+        PARTITION BY department_id
+        ORDER BY salary DESC
+        ROWS BETWEEN UNBOUNDED PRECEDING
+        AND UNBOUNDED FOLLOWING
+    ) AS lowest_department_salary
+
+FROM hr.employees
+ORDER BY department_id, salary DESC;
