@@ -1,0 +1,12 @@
+EMP_ID,EMP_NAME,DEPARTMENT,MANAGER_ID,SALARY,CITY,,EMP_ID,PROJECT_NAME,PROJECT_ROLE,HOURS_WORKED,STATUS
+101,Arun,IT,,90000,Bangalore,,101,ERP Migration,Manager,120,Active
+102,Priya,IT,101,65000,Hyderabad,,101,Cloud Migration,Architect,80,Active
+103,Rahul,HR,,55000,Chennai,,102,ERP Migration,Developer,150,Active
+104,Sneha,Finance,106,70000,,,102,AI Platform,Developer,100,Completed
+105,Kiran,IT,101,,Bangalore,,103,HR Automation,Lead,90,Active
+106,Meena,Finance,,95000,Mumbai,,104,Finance Portal,Analyst,110,Active
+107,Ravi,,101,60000,Pune,,104,Audit System,,60,Completed
+108,Anjali,HR,103,50000,Bangalore,,106,Finance Portal,Manager,130,Active
+109,Vijay,Sales,,75000,Delhi,,108,HR Automation,Analyst,,Active
+110,Deepa,Sales,109,58000,,,999,External Project,Consultant,50,Active
+,,,,,,,,Unassigned Project,Developer,40,Pending
